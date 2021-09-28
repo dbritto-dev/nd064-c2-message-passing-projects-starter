@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  db:
+    image: mongo
+    ports:
+      - "50052:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  server:
+    build: .
+    ports:
+      - "50051:8080"
+    environment:
+      MONGODB_URI: mongodb://root:root@db:27017
+      MONGODB_DB_NAME: location_api_db
+      MONGODB_DB_COLLECTION_NAME: locations
