@@ -1,0 +1,7 @@
+-r common.in
+
+black
+flake8
+pytest
+coverage
+waitress
