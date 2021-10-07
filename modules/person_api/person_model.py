@@ -4,10 +4,10 @@
 from sqlalchemy import Column, Integer, String
 
 # Local packages
-from database import db  # noqa
+from person_database import db  # noqa
 
 
-class Person(db.Model):
+class PersonModel(db.Model):
     __tablename__ = "persons"
 
     id = Column(Integer, primary_key=True)

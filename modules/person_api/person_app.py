@@ -6,10 +6,10 @@ from flask import Flask
 # Local packages
 
 
-def create_app():
-    from cors import register_cors
-    from controller import register_api
-    from database import register_db
+def create_app() -> Flask:
+    from person_cors import register_cors
+    from person_controller import register_api
+    from person_database import register_db
 
     app = Flask(__name__)
 

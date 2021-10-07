@@ -6,7 +6,7 @@ import dotenv
 import waitress
 
 # Local packages
-from app import create_app
+from person_app import create_app
 
 dotenv.load_dotenv()
 

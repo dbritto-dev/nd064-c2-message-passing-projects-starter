@@ -8,10 +8,10 @@ from flask_restx import Api, Resource
 from werkzeug.exceptions import BadRequest, NotFound
 
 # Local packages
-from model import Person
-from schema import PersonSchema
-from service import PersonService
-from dto import PersonCreateDTO
+from person_model import PersonModel
+from person_schema import PersonSchema
+from person_service import PersonService
+from person_dto import PersonCreateDTO
 
 
 api = Api(title="Person API", version="1.0.0")
@@ -37,14 +37,14 @@ def handle_no_result_exception(error):
 class PersonsResource(Resource):
     @accepts(schema=PersonSchema, api=api)
     @responds(schema=PersonSchema, api=api)
-    def post(self) -> Person:
+    def post(self) -> PersonModel:
         payload: PersonCreateDTO = request.get_json()
-        person: Person = PersonService.create(payload)
+        person = PersonService.create(payload)
         return person
 
     @responds(schema=PersonSchema(many=True))
-    def get(self) -> list[Person]:
-        persons: list[Person] = PersonService.retrieve_all()
+    def get(self) -> list[PersonModel]:
+        persons = PersonService.retrieve_all()
         return persons
 
 
@@ -52,12 +52,12 @@ class PersonsResource(Resource):
 @ns.param("person_id", "Unique ID for a given Person", _in="query")
 class PersonResource(Resource):
     @responds(schema=PersonSchema, api=api)
-    def get(self, person_id: int) -> Person:
-        person: Person = PersonService.retrieve(person_id)
+    def get(self, person_id: int) -> PersonModel:
+        person = PersonService.retrieve(person_id)
         return person
 
 
-def register_api(app: Flask):
+def register_api(app: Flask) -> None:
     app.config["ERROR_INCLUDE_MESSAGE"] = False
 
     api.init_app(app)

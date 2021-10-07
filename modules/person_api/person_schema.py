@@ -4,10 +4,9 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 # Local packages
-from model import Person
+from person_model import PersonModel
 
 
 class PersonSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = Person
-        transient = True
+        model = PersonModel

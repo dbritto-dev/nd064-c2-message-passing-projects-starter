@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:alpine
     ports:
-      - "60052:54432"
+      - "50052:5432"
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
     environment:
@@ -15,6 +15,6 @@ services:
   app:
     build: .
     ports:
-      - "60051:8080"
+      - "50051:8080"
     environment:
       SQLALCHEMY_DATABASE_URI: postgresql://person_api_db_user:person_api_db_pass@db:5432/person_api_db

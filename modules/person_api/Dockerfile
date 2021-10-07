@@ -3,8 +3,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 COPY requirements.txt ./
-RUN python -m pip install --upgrade pip
-RUN python -m pip install --user -r requirements.txt
+RUN python -m pip install --upgrade pip && python -m pip install --user -r requirements.txt
 
 FROM python:3.9-slim-buster
 WORKDIR /app
