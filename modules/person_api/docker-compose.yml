@@ -6,7 +6,8 @@ services:
     ports:
       - "50052:5432"
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/
+      # The default postgis script is -> /docker-entrypoint-initdb.d/10_postgis.sh
+      - ./db/11_init_table.sh:/docker-entrypoint-initdb.d/11_init_table.sh
     environment:
       POSTGRES_USER: person_api_db_user
       POSTGRES_PASSWORD: person_api_db_pass
