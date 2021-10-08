@@ -1,4 +1,8 @@
 grpcio
 grpcio-tools
-pymongo
+sqlalchemy
+marshmallow_sqlalchemy
+geoalchemy2
+shapely
 python-dotenv
+psycopg2-binary

@@ -4,12 +4,20 @@
 #
 #    pip-compile --output-file=requirements.txt requirements/production.in
 #
+geoalchemy2==0.9.4        # via -r requirements\common.in
+greenlet==1.1.2           # via sqlalchemy
 grpcio-tools==1.41.0      # via -r requirements\common.in
 grpcio==1.41.0            # via -r requirements\common.in, grpcio-tools
+marshmallow-sqlalchemy==0.26.1  # via -r requirements\common.in
+marshmallow==3.13.0       # via marshmallow-sqlalchemy
+packaging==21.0           # via geoalchemy2
 protobuf==3.18.0          # via grpcio-tools
-pymongo==3.12.0           # via -r requirements\common.in
+psycopg2-binary==2.9.1    # via -r requirements\common.in
+pyparsing==2.4.7          # via packaging
 python-dotenv==0.19.0     # via -r requirements\common.in
+shapely==1.7.1            # via -r requirements\common.in
 six==1.16.0               # via grpcio
+sqlalchemy==1.4.25        # via -r requirements\common.in, geoalchemy2, marshmallow-sqlalchemy
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

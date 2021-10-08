@@ -1,22 +1,29 @@
-import location_repository
-import location_pb2 as location_types
+# Built-in packages
+
+# Third-party packages
+
+# Local packages
+from location_dto import CreateLocationDTO, RetrieveLocationDTO, RetrieveLocationsDTO
+from location_repository import LocationRepository
+from location_model import LocationModel
 
 
 class LocationService:
-    @location_repository.inject_repository
-    def __init__(self, repository: location_repository.LocationRepository):
-        self.repository = repository
+    @staticmethod
+    def create(create_location_dto: CreateLocationDTO) -> LocationModel:
+        location = LocationRepository.create(create_location_dto)
+        return location
 
-    def create_location(self, create_location_dto: dict) -> location_types.Location:
-        return self.repository.create_location(create_location_dto)
+    @staticmethod
+    def retrieve(retrieve_location_dto: RetrieveLocationDTO) -> LocationModel:
+        location = LocationRepository.retrieve(retrieve_location_dto)
+        if not location:
+            raise Exception(f"Location not found")
+        return location
 
-    def retrieve_location(self, retrieve_location_dto: dict) -> location_types.Location:
-        return self.repository.retrieve_location(retrieve_location_dto)
-
-
-def inject_service(init_func):
-    def _inject_service(self, **kwargs):
-        service = LocationService()
-        init_func(self, **{"service": service, **kwargs})
-
-    return _inject_service
+    @staticmethod
+    def retrieve_all(
+        retrieve_locations_dto: RetrieveLocationsDTO,
+    ) -> list[LocationModel]:
+        locations = LocationRepository.retrieve_all(retrieve_locations_dto)
+        return locations

@@ -7,6 +7,7 @@ package location;
 service LocationService {
   rpc Create(CreateRequest) returns (CreateResponse);
   rpc Retrieve(RetrieveRequest) returns (RetrieveResponse);
+  rpc RetrieveAll(RetrieveAllRequest) returns (RetrieveAllResponse);
 }
 
 message Coordinate {
@@ -15,24 +16,35 @@ message Coordinate {
 }
 
 message Location {
-  string id = 1;
-  string person_id = 2;
+  int32 id = 1;
+  int32 person_id = 2;
   Coordinate coordinate = 3;
   google.protobuf.Timestamp creation_time = 4;
 }
 
 message CreateRequest {
-  string person_id = 1;
-  Coordinate coordinate = 3;
-  google.protobuf.Timestamp creation_time = 4; 
+  int32 person_id = 1;
+  Coordinate coordinate = 2;
 }
 
 message CreateResponse {
   Location location = 1;
 }
 
-message RetrieveRequest {}
+message RetrieveRequest {
+  int32 id = 1;
+}
 
 message RetrieveResponse {
   Location location = 1;
+}
+
+message RetrieveAllRequest {
+  optional int32 person_id = 1;
+  optional google.protobuf.Timestamp start_date = 2;
+  optional google.protobuf.Timestamp end_date = 3;
+}
+
+message RetrieveAllResponse {
+  repeated Location locations = 1;
 }

@@ -1,50 +1,65 @@
 # Built-in packages
 import typing
+import datetime
+
 
 # Third-party packages
+from geoalchemy2.functions import ST_Point
 
 
 # Local packages
-import location_pb2 as location_types
+from location_pb2 import CreateRequest, RetrieveRequest, RetrieveAllRequest
 
 
-class CoordinateData(typing.TypedDict):
-    latitude: str
-    longitude: str
+class CreateLocationDTO(typing.TypedDict):
+    person_id: int
+    coordinate: ST_Point
 
 
-class LocationData(typing.TypedDict):
-    id: str
-    person_id: str
-    coordinate: CoordinateData
-    creation_time: str
-
-
-def get_create_location_creation_time_dto(request: location_types.CreateRequest):
+def get_create_location_dto(create_request: CreateRequest) -> CreateLocationDTO:
     return {
-        "seconds": request.creation_time.seconds,
-        "nanos": request.creation_time.nanos,
+        "person_id": create_request.person_id,
+        "coordinate": ST_Point(
+            create_request.coordinate.latitude, create_request.coordinate.longitude
+        ),
     }
 
 
-def get_create_location_coordinate_dto(request: location_types.CreateRequest):
+class RetrieveLocationDTO(typing.TypedDict):
+    id: int
+
+
+def get_retrieve_location_dto(retrieve_request: RetrieveRequest) -> RetrieveLocationDTO:
+    return {"id": retrieve_request.id}
+
+
+class RetrieveLocationsDTO(typing.TypedDict):
+    person_id: typing.Optional[int]
+    start_date: typing.Optional[datetime.datetime]
+    end_date: typing.Optional[datetime.datetime]
+
+
+def get_retrieve_locations_dto(
+    retrieve_locations_request: RetrieveAllRequest,
+) -> RetrieveLocationsDTO:
     return {
-        "latitude": request.coordinate.latitude,
-        "longitude": request.coordinate.longitude,
-    }
-
-
-def get_create_location_dto(request: location_types.CreateRequest) -> LocationData:
-    return {
-        "person_id": request.person_id,
-        "coordinate": get_create_location_coordinate_dto(request),
-        "creation_time": get_create_location_creation_time_dto(request),
-    }
-
-
-def get_retrieve_location_dto(request: location_types.RetrieveRequest) -> LocationData:
-    return {
-        "person_id": request.person_id,
-        "coordinate": get_create_location_coordinate_dto(request),
-        "creation_time": get_create_location_creation_time_dto(request),
+        "person_id": (
+            retrieve_locations_request.person_id
+            if retrieve_locations_request.person_id
+            else None
+        ),
+        "start_date": (
+            datetime.datetime.fromtimestamp(
+                retrieve_locations_request.start_date.seconds
+            ).isoformat()
+            if retrieve_locations_request.start_date.seconds > 0
+            else None
+        ),
+        "end_date": (
+            datetime.datetime.fromtimestamp(
+                retrieve_locations_request.end_date.seconds
+            ).isoformat()
+            if retrieve_locations_request.end_date.seconds > 0
+            else None
+        ),
     }

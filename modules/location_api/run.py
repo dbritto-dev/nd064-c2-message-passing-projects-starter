@@ -1,15 +1,19 @@
 # Built-in packages
-import asyncio
 import logging
 
 # Third-party packages
-import dotenv
+from dotenv import load_dotenv
 
 # Local packages
-import location_server
+from location_app import create_app
 
-dotenv.load_dotenv()
+load_dotenv()
+
+app = create_app()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    asyncio.get_event_loop().run_until_complete(location_server.serve())
+    logging.info(f'* Running on 127.0.0.1:8080')
+
+    app.start()
+    app.wait_for_termination()

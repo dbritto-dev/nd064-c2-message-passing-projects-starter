@@ -1,0 +1,61 @@
+#!/bin/sh
+
+set -e
+
+# Perform all actions as $POSTGRES_USER
+export PGUSER="$POSTGRES_USER"
+
+echo "Creating table"
+psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" <<- 'EOSQL'
+CREATE TABLE locations (
+    id SERIAL PRIMARY KEY,
+    person_id INT NOT NULL,
+    coordinate GEOMETRY NOT NULL,
+    creation_time TIMESTAMP NOT NULL DEFAULT NOW()
+);
+CREATE INDEX coordinate_idx ON locations (coordinate);
+CREATE INDEX creation_time_idx ON locations (creation_time);
+EOSQL
+
+echo "Populating table"
+psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" <<- 'EOSQL'
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (29, 1, '010100000000ADF9F197925EC0FDA19927D7C64240', '2020-08-18 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (30, 5, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-08-15 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (31, 5, '010100000000ADF9F197925EC0FDA19927D7C64240', '2020-08-15 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (32, 1, '0101000000477364E597925EC0FDA19927D7C64240', '2020-08-15 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (33, 1, '0101000000477364E597925EC021787C7BD7C64240', '2020-08-19 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (34, 6, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (36, 1, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (37, 1, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (38, 1, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (39, 1, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (40, 1, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (41, 1, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (42, 6, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (43, 6, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-06 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (44, 6, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (45, 6, '0101000000554FE61F7D87414002D9EBDD9FA45AC0', '2020-07-05 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (46, 6, '0101000000895C70067F874140CDB1BCAB9EA45AC0', '2020-04-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (47, 6, '0101000000895C70067F874140971128AC9EA45AC0', '2020-05-01 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (48, 6, '0101000000895C70067F874140CDB1BCAB9EA45AC0', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (49, 8, '0101000000895C70067F874140CDB1BCAB9EA45AC0', '2020-07-07 10:38:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (50, 8, '0101000000895C70067F874140971128AC9EA45AC0', '2020-07-07 10:38:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (51, 8, '0101000000895C70067F874140971128AC9EA45AC0', '2020-07-01 10:38:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (52, 9, '0101000000895C70067F874140971128AC9EA45AC0', '2020-07-01 10:38:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (53, 9, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (54, 9, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2019-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (55, 5, '0101000000842FA75F7D874140CEEEDAEF9A645AC0', '2019-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (56, 5, '0101000000842FA75F7D074140CEEEDAEF9A645AC0', '2019-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (57, 5, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (58, 8, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (59, 8, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (60, 8, '0101000000842FA75F7D874140CEEEDAEF9AA45AC0', '2020-07-06 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (61, 8, '0101000000842FA75F7D874140DA0FC2ED9AA45AC0', '2020-07-05 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (62, 8, '0101000000842FA75F7D8741403A18FBDC9AA45AC0', '2020-01-05 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (63, 5, '0101000000842FA75F7D8741403A18FBDC9AA45AC0', '2020-01-05 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (64, 6, '0101000000842FA75F7D8741403A18FBDC9AA45AC0', '2020-01-05 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (65, 9, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (66, 5, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (67, 8, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
+INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (68, 6, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-08-15 10:37:06.000000');
+EOSQL

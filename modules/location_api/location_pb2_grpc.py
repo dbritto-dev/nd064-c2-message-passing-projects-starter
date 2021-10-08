@@ -24,6 +24,11 @@ class LocationServiceStub(object):
                 request_serializer=location__pb2.RetrieveRequest.SerializeToString,
                 response_deserializer=location__pb2.RetrieveResponse.FromString,
                 )
+        self.RetrieveAll = channel.unary_unary(
+                '/location.LocationService/RetrieveAll',
+                request_serializer=location__pb2.RetrieveAllRequest.SerializeToString,
+                response_deserializer=location__pb2.RetrieveAllResponse.FromString,
+                )
 
 
 class LocationServiceServicer(object):
@@ -41,6 +46,12 @@ class LocationServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def RetrieveAll(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_LocationServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_LocationServiceServicer_to_server(servicer, server):
                     servicer.Retrieve,
                     request_deserializer=location__pb2.RetrieveRequest.FromString,
                     response_serializer=location__pb2.RetrieveResponse.SerializeToString,
+            ),
+            'RetrieveAll': grpc.unary_unary_rpc_method_handler(
+                    servicer.RetrieveAll,
+                    request_deserializer=location__pb2.RetrieveAllRequest.FromString,
+                    response_serializer=location__pb2.RetrieveAllResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class LocationService(object):
         return grpc.experimental.unary_unary(request, target, '/location.LocationService/Retrieve',
             location__pb2.RetrieveRequest.SerializeToString,
             location__pb2.RetrieveResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def RetrieveAll(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/location.LocationService/RetrieveAll',
+            location__pb2.RetrieveAllRequest.SerializeToString,
+            location__pb2.RetrieveAllResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
