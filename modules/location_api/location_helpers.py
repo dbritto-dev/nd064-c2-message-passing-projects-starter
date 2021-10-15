@@ -15,8 +15,8 @@ def from_instance_to_grpc(instance: LocationModel) -> Location:
     location_person_id = instance.person_id
     location_coordinate_shape = to_shape(instance.coordinate)
     location_coordinate = Coordinate(
-        latitude=str(location_coordinate_shape.y),
-        longitude=str(location_coordinate_shape.x),
+        latitude=str(location_coordinate_shape.x),
+        longitude=str(location_coordinate_shape.y),
     )
     location_creation_time = Timestamp(seconds=int(instance.creation_time.timestamp()))
     location = Location(

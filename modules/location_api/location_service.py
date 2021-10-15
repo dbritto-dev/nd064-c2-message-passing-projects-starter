@@ -1,9 +1,14 @@
 # Built-in packages
 
 # Third-party packages
+from werkzeug.exceptions import NotFound
 
 # Local packages
-from location_dto import CreateLocationDTO, RetrieveLocationDTO, RetrieveLocationsDTO
+from location_dto import (
+    CreateLocationDTO,
+    RetrieveLocationsDTO,
+    RetrieveLocationsFilteredDTO,
+)
 from location_repository import LocationRepository
 from location_model import LocationModel
 
@@ -15,10 +20,10 @@ class LocationService:
         return location
 
     @staticmethod
-    def retrieve(retrieve_location_dto: RetrieveLocationDTO) -> LocationModel:
-        location = LocationRepository.retrieve(retrieve_location_dto)
+    def retrieve(location_id: int) -> LocationModel:
+        location = LocationRepository.retrieve(location_id)
         if not location:
-            raise Exception(f"Location not found")
+            raise NotFound(f"Location not found")
         return location
 
     @staticmethod
@@ -26,4 +31,12 @@ class LocationService:
         retrieve_locations_dto: RetrieveLocationsDTO,
     ) -> list[LocationModel]:
         locations = LocationRepository.retrieve_all(retrieve_locations_dto)
+        return locations
+
+    def retrieve_filtered(
+        retrieve_locations_filtered_dto: RetrieveLocationsFilteredDTO,
+    ) -> list[LocationModel]:
+        locations = LocationRepository.retrieve_filtered(
+            retrieve_locations_filtered_dto
+        )
         return locations

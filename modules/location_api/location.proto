@@ -8,6 +8,7 @@ service LocationService {
   rpc Create(CreateRequest) returns (CreateResponse);
   rpc Retrieve(RetrieveRequest) returns (RetrieveResponse);
   rpc RetrieveAll(RetrieveAllRequest) returns (RetrieveAllResponse);
+  rpc RetrieveFiltered(RetrieveFilteredRequest) returns (RetrieveFilteredResponse);
 }
 
 message Coordinate {
@@ -46,5 +47,17 @@ message RetrieveAllRequest {
 }
 
 message RetrieveAllResponse {
+  repeated Location locations = 1;
+}
+
+message RetrieveFilteredRequest {
+  int32 person_id = 1;
+  Coordinate coordinate = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  int32 meters = 5; 
+}
+
+message RetrieveFilteredResponse {
   repeated Location locations = 1;
 }

@@ -4,8 +4,8 @@ import os
 
 # Third-party packages
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import Query, Session
+from sqlalchemy.engine.base import Engine
+from sqlalchemy.orm import sessionmaker, Query, Session
 from sqlalchemy.ext.declarative import declarative_base
 
 # Local packages
@@ -18,11 +18,12 @@ class SQLAlchemy:
         self.Query = Query
         self.Model = declarative_base()
         self.session: Session = None
+        self.engine: Engine = None
 
     def init_session(self):
         sqlalchemy_db_uri = os.getenv("SQLALCHEMY_DATABASE_URI")
-        engine = create_engine(sqlalchemy_db_uri)
-        self.session = sessionmaker(engine)()
+        self.engine = create_engine(sqlalchemy_db_uri)
+        self.session = sessionmaker(self.engine)()
 
 
 db = SQLAlchemy()

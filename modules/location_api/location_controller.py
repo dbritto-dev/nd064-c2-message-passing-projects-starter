@@ -17,11 +17,13 @@ from location_pb2 import (
     RetrieveResponse,
     RetrieveAllRequest,
     RetrieveAllResponse,
+    RetrieveFilteredRequest,
+    RetrieveFilteredResponse,
 )
 from location_dto import (
     get_create_location_dto,
-    get_retrieve_location_dto,
     get_retrieve_locations_dto,
+    get_retrieve_locations_filtered_dto,
 )
 from location_service import LocationService
 from location_helpers import from_instance_to_grpc, from_instances_to_grpc
@@ -46,8 +48,7 @@ def register_api(grpc_server: Server):
             self, request: RetrieveRequest, context: ServicerContext
         ) -> RetrieveResponse:
             try:
-                retrieve_location_dto = get_retrieve_location_dto(request)
-                instance = LocationService.retrieve(retrieve_location_dto)
+                instance = LocationService.retrieve(request.person_id)
                 location = from_instance_to_grpc(instance)
                 return RetrieveResponse(location=location)
             except Exception as e:
@@ -62,5 +63,17 @@ def register_api(grpc_server: Server):
             instances = LocationService.retrieve_all(retrieve_locations_dto)
             locations = from_instances_to_grpc(instances)
             return RetrieveAllResponse(locations=locations)
+
+        def RetrieveFiltered(
+            self, request: RetrieveFilteredRequest, context: ServicerContext
+        ):
+            retrieve_locations_filtered_dto = get_retrieve_locations_filtered_dto(
+                request
+            )
+            instances = LocationService.retrieve_filtered(
+                retrieve_locations_filtered_dto
+            )
+            locations = from_instances_to_grpc(instances)
+            return RetrieveFilteredResponse(locations=locations)
 
     add_LocationServiceServicer_to_server(LocationServiceServicer(), grpc_server)

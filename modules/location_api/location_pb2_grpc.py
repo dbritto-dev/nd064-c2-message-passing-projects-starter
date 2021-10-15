@@ -29,6 +29,11 @@ class LocationServiceStub(object):
                 request_serializer=location__pb2.RetrieveAllRequest.SerializeToString,
                 response_deserializer=location__pb2.RetrieveAllResponse.FromString,
                 )
+        self.RetrieveFiltered = channel.unary_unary(
+                '/location.LocationService/RetrieveFiltered',
+                request_serializer=location__pb2.RetrieveFilteredRequest.SerializeToString,
+                response_deserializer=location__pb2.RetrieveFilteredResponse.FromString,
+                )
 
 
 class LocationServiceServicer(object):
@@ -52,6 +57,12 @@ class LocationServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def RetrieveFiltered(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_LocationServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -69,6 +80,11 @@ def add_LocationServiceServicer_to_server(servicer, server):
                     servicer.RetrieveAll,
                     request_deserializer=location__pb2.RetrieveAllRequest.FromString,
                     response_serializer=location__pb2.RetrieveAllResponse.SerializeToString,
+            ),
+            'RetrieveFiltered': grpc.unary_unary_rpc_method_handler(
+                    servicer.RetrieveFiltered,
+                    request_deserializer=location__pb2.RetrieveFilteredRequest.FromString,
+                    response_serializer=location__pb2.RetrieveFilteredResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -128,5 +144,22 @@ class LocationService(object):
         return grpc.experimental.unary_unary(request, target, '/location.LocationService/RetrieveAll',
             location__pb2.RetrieveAllRequest.SerializeToString,
             location__pb2.RetrieveAllResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def RetrieveFiltered(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/location.LocationService/RetrieveFiltered',
+            location__pb2.RetrieveFilteredRequest.SerializeToString,
+            location__pb2.RetrieveFilteredResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

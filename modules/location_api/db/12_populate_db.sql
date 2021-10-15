@@ -1,24 +1,3 @@
-#!/bin/sh
-
-set -e
-
-# Perform all actions as $POSTGRES_USER
-export PGUSER="$POSTGRES_USER"
-
-echo "Creating table"
-psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" <<- 'EOSQL'
-CREATE TABLE locations (
-    id SERIAL PRIMARY KEY,
-    person_id INT NOT NULL,
-    coordinate GEOMETRY NOT NULL,
-    creation_time TIMESTAMP NOT NULL DEFAULT NOW()
-);
-CREATE INDEX coordinate_idx ON locations (coordinate);
-CREATE INDEX creation_time_idx ON locations (creation_time);
-EOSQL
-
-echo "Populating table"
-psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" <<- 'EOSQL'
 INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (29, 1, '010100000000ADF9F197925EC0FDA19927D7C64240', '2020-08-18 10:37:06.000000');
 INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (30, 5, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-08-15 10:37:06.000000');
 INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (31, 5, '010100000000ADF9F197925EC0FDA19927D7C64240', '2020-08-15 10:37:06.000000');
@@ -58,4 +37,3 @@ INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (65, 9, 
 INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (66, 5, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
 INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (67, 8, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-07-07 10:37:06.000000');
 INSERT INTO locations (id, person_id, coordinate, creation_time) VALUES (68, 6, '010100000097FDBAD39D925EC0D00A0C59DDC64240', '2020-08-15 10:37:06.000000');
-EOSQL
