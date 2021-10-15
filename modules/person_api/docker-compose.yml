@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:alpine
     ports:
-      - "50052:5432"
+      - "30052:5432"
     volumes:
       # The default postgis script is -> /docker-entrypoint-initdb.d/10_postgis.sh
       - ./db/11_init_table.sh:/docker-entrypoint-initdb.d/11_init_table.sh
@@ -16,6 +16,6 @@ services:
   app:
     build: .
     ports:
-      - "50051:8080"
+      - "30051:8080"
     environment:
       SQLALCHEMY_DATABASE_URI: postgresql://person_api_db_user:person_api_db_pass@db:5432/person_api_db
