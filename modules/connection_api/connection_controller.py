@@ -12,28 +12,27 @@ from werkzeug.exceptions import BadRequest, NotFound
 from requests import get
 
 # Local packages
-# from connection_schema import ConnectionQuerySchema
 from connection_service import ConnectionService
-from connection_schema import ConnectionQuerySchema
+from connection_schema import ConnectionQuerySchema, ConnectionSchema
 
 DATE_FORMAT = "%Y-%m-%d"
 
 api = Api(title="Connection API", version="1.0.0")
 ns = api.namespace("connections", description="Connection CRUD operations")
 
-# logging.basicConfig(level=logging.WARNING)
-# logger = logging.getLogger("connection-api")
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger("connection-api")
 
 
 @ns.errorhandler(BadRequest)
 def handle_bad_request(error):
-    # logger.warning(str(error))
+    logger.warning(str(error))
     return {"message": str(error)}, 400
 
 
 @ns.errorhandler(NotFound)
 def handle_no_result_exception(error):
-    # logger.warning(str(error))
+    logger.warning(str(error))
     return {"message": str(error)}, 404
 
 
@@ -46,7 +45,7 @@ class ConnectionDataResource(Resource):
         query_params_schema=ConnectionQuerySchema,
         api=api,
     )
-    # @responds(schema=ConnectionSchema, many=True)
+    @responds(schema=ConnectionSchema(many=True), api=api)
     def get(self, person_id: int):
         start_date: datetime = request.parsed_query_params.get("start_date")
         end_date: datetime = request.parsed_query_params.get("end_date")

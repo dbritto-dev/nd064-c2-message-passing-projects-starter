@@ -90,7 +90,7 @@ class ConnectionService:
                             "longitude": location.coordinate.longitude,
                             "creation_time": datetime.datetime.fromtimestamp(
                                 location.creation_time.seconds
-                            ).isoformat(),
+                            ),
                         },
                     }
                 )
