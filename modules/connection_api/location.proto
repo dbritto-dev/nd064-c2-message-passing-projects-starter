@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package location;
+
+service LocationService {
+  rpc Create(CreateRequest) returns (CreateResponse);
+  rpc Retrieve(RetrieveRequest) returns (RetrieveResponse);
+  rpc RetrieveAll(RetrieveAllRequest) returns (RetrieveAllResponse);
+  rpc RetrieveFiltered(RetrieveFilteredRequest) returns (RetrieveFilteredResponse);
+}
+
+message Coordinate {
+  string latitude = 1;
+  string longitude = 2;
+}
+
+message Location {
+  int32 id = 1;
+  int32 person_id = 2;
+  Coordinate coordinate = 3;
+  google.protobuf.Timestamp creation_time = 4;
+}
+
+message CreateRequest {
+  int32 person_id = 1;
+  Coordinate coordinate = 2;
+}
+
+message CreateResponse {
+  Location location = 1;
+}
+
+message RetrieveRequest {
+  int32 id = 1;
+}
+
+message RetrieveResponse {
+  Location location = 1;
+}
+
+message RetrieveAllRequest {
+  optional int32 person_id = 1;
+  optional google.protobuf.Timestamp start_date = 2;
+  optional google.protobuf.Timestamp end_date = 3;
+}
+
+message RetrieveAllResponse {
+  repeated Location locations = 1;
+}
+
+message RetrieveFilteredRequest {
+  int32 person_id = 1;
+  Coordinate coordinate = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  int32 meters = 5; 
+}
+
+message RetrieveFilteredResponse {
+  repeated Location locations = 1;
+}

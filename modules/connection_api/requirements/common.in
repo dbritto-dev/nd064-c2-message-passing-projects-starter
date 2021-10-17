@@ -1,0 +1,9 @@
+flask
+flask_cors
+flask_restx
+flask_accepts
+grpcio
+grpcio-tools
+requests
+marshmallow
+python-dotenv
