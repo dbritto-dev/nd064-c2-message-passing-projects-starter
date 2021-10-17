@@ -18,6 +18,7 @@ python-dotenv==0.19.0     # via -r requirements\common.in
 shapely==1.7.1            # via -r requirements\common.in
 six==1.16.0               # via grpcio
 sqlalchemy==1.4.25        # via -r requirements\common.in, geoalchemy2, marshmallow-sqlalchemy
+werkzeug==2.0.2           # via -r requirements\common.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

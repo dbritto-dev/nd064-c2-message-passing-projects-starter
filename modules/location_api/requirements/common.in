@@ -1,3 +1,4 @@
+werkzeug
 grpcio
 grpcio-tools
 sqlalchemy

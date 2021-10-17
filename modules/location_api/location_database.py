@@ -10,6 +10,12 @@ from sqlalchemy.ext.declarative import declarative_base
 
 # Local packages
 
+DB_USER = os.getenv("DB_USERNAME")
+DB_PASS = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "5432")
+
 
 class SQLAlchemy:
     Query: Query = None
@@ -21,8 +27,9 @@ class SQLAlchemy:
         self.engine: Engine = None
 
     def init_session(self):
-        sqlalchemy_db_uri = os.getenv("SQLALCHEMY_DATABASE_URI")
-        self.engine = create_engine(sqlalchemy_db_uri)
+        self.engine = create_engine(
+            f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        )
         self.session = sessionmaker(self.engine)()
 
 

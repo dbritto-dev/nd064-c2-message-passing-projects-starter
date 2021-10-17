@@ -39,6 +39,7 @@ sqlalchemy==1.4.25        # via -r requirements\common.in, geoalchemy2, marshmal
 toml==0.10.2              # via pytest
 tomli==1.2.1              # via black
 typing-extensions==3.10.0.2  # via black
+werkzeug==2.0.2           # via -r requirements\common.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

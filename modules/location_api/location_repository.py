@@ -1,5 +1,4 @@
 # Built-in packages
-import logging
 
 # Third-party packages
 from sqlalchemy import cast, func, text
@@ -14,7 +13,6 @@ from geoalchemy2.functions import (
 from location_database import db
 from location_dto import (
     CreateLocationDTO,
-    RetrieveLocationDTO,
     RetrieveLocationsDTO,
     RetrieveLocationsFilteredDTO,
 )
