@@ -11,6 +11,7 @@ def create_app(env=None):
     from app.routes import register_routes
 
     app = Flask(__name__)
+    app.url_map.strict_slashes = False
     app.config.from_object(config_by_name[env or "test"])
     api = Api(app, title="UdaConnect API", version="0.1.0")
 
