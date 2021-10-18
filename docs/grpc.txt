@@ -1,0 +1,86 @@
+# Location API
+
+The Location API has 4 methods
+
+- Create
+- Retrieve
+- RetrieveAll
+- RetrieveFiltered
+
+# How to make calls to Location API
+
+Using BloomRPC (https://github.com/uw-labs/bloomrpc) you need to import the proto file (location.proto) 
+inside of the location module in `modules/location-api`
+
+# How to use the location.LocationService.Create method
+ 
+Use the next payload to create a new location
+
+```json
+{
+    "person_id": 1,
+    "coordinate": {
+      "latitude": "-106.5721846",
+      "longitude": "35.058564"
+    },
+    "creation_time": {
+      "seconds": "1594118287"
+    }
+}
+```
+
+# How to use the location.LocationService.Retrieve method
+
+Use the next payload to get a Location
+
+```json
+{
+  "id": 32
+}
+```
+
+# How to use the location.LocationService.RetrieveAll method
+
+Use the next payload to get all the locations by a given person_id, stat_date or end_date. All of these
+fields are optional. If u want to get all the location just use an empty object
+
+```json
+{
+  "person_id": 1,
+  "start_date": {
+    "seconds": 1577854800
+  },
+  "end_date": {
+    "seconds": 1609304400
+  }
+}
+```
+
+# How to use the location.LocationService.RetrieveFiltered method
+
+Use the next payload to get locations necessary to get the connections by a given person_id
+
+{
+  "person_id": 1,
+  "coordinate": {
+    "latitude": "35.0585136",
+    "longitude": "-106.5719566"
+  },
+  "start_date": { "seconds": 1577854800 },
+  "end_date": { "seconds": 1609304400 },
+  "meters": 5
+}
+
+# How to make health checks to Location API
+
+Using BloomRPC (https://github.com/uw-labs/bloomrpc) you need to import the proto file (health.api) 
+inside of the location module in `modules/location-api`
+
+# How to use the Check grpc.health.v1.Health.Check method
+
+Use the next payload to get the status of the service, if the status is SERVING we are good
+
+```json
+{}
+```
+

@@ -1,0 +1,175 @@
+openapi: 3.0.1
+info:
+  title: Udaconnect API
+  version: 1.0.0
+tags:
+  - name: persons
+    description: Person operations
+  - name: connections
+    description: Connection operations
+paths:
+  /persons/:
+    get:
+      tags:
+        - persons
+      operationId: get_persons_resource
+      responses:
+        200:
+          description: Success
+          content: {}
+    post:
+      tags:
+        - persons
+      operationId: post_persons_resource
+      parameters:
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          schema:
+            type: string
+            format: mask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Person"
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+      x-codegen-request-body-name: payload
+    servers:
+      - url: "http://{host}:30003"
+        variables:
+          host:
+            default: "localhost"
+            description: "Connection Server"
+  /persons/{person_id}:
+    get:
+      tags:
+        - persons
+      operationId: get_person_resource
+      parameters:
+        - name: person_id
+          in: path
+          description: Unique ID for a given Person
+          required: true
+          schema:
+            type: integer
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          schema:
+            type: string
+            format: mask
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+      servers:
+        - url: "http://{host}:30001"
+          variables:
+            host:
+              default: "localhost"
+              description: "Connection Server"
+  /connections/{person_id}:
+    get:
+      tags:
+        - connections
+      operationId: get_connection_data_resource
+      parameters:
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: distance
+          in: query
+          description: Proximity to a given user in meters
+          schema:
+            type: integer
+        - name: end_date
+          in: query
+          description: Upper bound of date range
+          required: true
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: Lower bound of date range
+          required: true
+          schema:
+            type: string
+        - name: X-Fields
+          in: header
+          description: An optional fields mask
+          schema:
+            type: string
+            format: mask
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Connection"
+    servers:
+      - url: "http://{host}:30003"
+        variables:
+          host:
+            default: "localhost"
+            description: "Connection Server"
+components:
+  schemas:
+    Person:
+      required:
+        - company_name
+        - first_name
+        - last_name
+      type: object
+      properties:
+        last_name:
+          type: string
+        first_name:
+          type: string
+        company_name:
+          type: string
+        id:
+          type: integer
+    Connection:
+      type: object
+      properties:
+        location:
+          $ref: "#/components/schemas/Location"
+        person:
+          $ref: "#/components/schemas/Person"
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+        longitude:
+          type: string
+        creation_time:
+          type: string
+          format: date-time
+        latitude:
+          type: string
+        person_id:
+          type: integer
+  responses:
+    MaskError:
+      description: When any error occurs on mask
+      content: {}
+    ParseError:
+      description: When a mask can't be parsed
+      content: {}
