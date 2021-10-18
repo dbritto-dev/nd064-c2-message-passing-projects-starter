@@ -23,17 +23,12 @@ Vagrant.configure("2") do |config|
     master.vm.network "forwarded_port", guest: 6443, host: 6443 # API Access
     for p in 30000..30100 # expose NodePort IP's
       master.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
-      end
+    end
     master.vm.provider "virtualbox" do |v|
-      v.memory = "3072"
-      v.name = "master"
-      end
-    master.vm.provision "shell", inline: <<-SHELL
-      sudo zypper refresh
-      sudo zypper --non-interactive install bzip2
-      sudo zypper --non-interactive install etcd
-      curl -sfL https://get.k3s.io | sh -
-    SHELL
+      v.memory = "4096"
+      v.cpus = 4
+    end
+    master.vm.provision "shell", path: "scripts/init.sh"
   end
 
 
@@ -66,7 +61,7 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder ".", "/vagrant"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
