@@ -53,7 +53,7 @@ def register_api(grpc_server: Server):
             self, request: RetrieveRequest, context: ServicerContext
         ) -> RetrieveResponse:
             try:
-                instance = LocationService.retrieve(request.person_id)
+                instance = LocationService.retrieve(request.id)
                 location = from_instance_to_grpc(instance)
                 return RetrieveResponse(location=location)
             except Exception as e:
