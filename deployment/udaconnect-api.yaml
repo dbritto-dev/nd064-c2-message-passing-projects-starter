@@ -6,10 +6,15 @@ metadata:
   name: udaconnect-api
 spec:
   ports:
-  - name: "5000"
-    port: 5000
-    targetPort: 5000
-    nodePort: 30001
+    - name: "person-api-port"
+      port: 30050
+      nodePort: 30001
+    - name: "location-api-port"
+      port: 30060
+      nodePort: 30002
+    - name: "connection-api-port"
+      port: 30070
+      nodePort: 30003
   selector:
     service: udaconnect-api
   type: NodePort
@@ -31,33 +36,118 @@ spec:
         service: udaconnect-api
     spec:
       containers:
-      - image: udacity/nd064-udaconnect-api:latest
-        name: udaconnect-api
-        imagePullPolicy: Always
-        env:
-        - name: DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_USERNAME
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: DB_PASSWORD
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_NAME
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_HOST
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_PORT
+        - image: minorpatch/udaconnect-person-api
+          name: udaconnect-person-api
+          imagePullPolicy: Always
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_NAME
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_PORT
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 30050
+        - image: minorpatch/udaconnect-location-api
+          name: udaconnect-location-api
+          imagePullPolicy: Always
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_NAME
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_PORT
+          livenessProbe:
+            exec:
+              command:
+                [
+                  "/bin/grpc_health_probe",
+                  "-addr=:30060",
+                  "-connect-timeout=100ms",
+                  "-rpc-timeout=150ms",
+                ]
+        - image: minorpatch/udaconnect-connection-api
+          name: udaconnect-connection-api
+          imagePullPolicy: Always
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_NAME
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_PORT
+            - name: PERSON_API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: micro-env
+                  key: PERSON_API_ENDPOINT
+            - name: LOCATION_API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: micro-env
+                  key: LOCATION_API_ENDPOINT
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 30070
       restartPolicy: Always
