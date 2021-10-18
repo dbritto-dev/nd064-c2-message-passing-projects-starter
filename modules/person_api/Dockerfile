@@ -10,4 +10,5 @@ WORKDIR /app
 COPY --from=builder /root/.local /root/.local
 COPY . .
 ENV PATH=/root/.local:$PATH
+EXPOSE 5000
 CMD [ "python", "run.py" ]

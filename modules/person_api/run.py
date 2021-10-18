@@ -14,4 +14,4 @@ app = create_app()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    serve(app)
+    serve(app, port=30050)

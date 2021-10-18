@@ -1,7 +1,7 @@
 # Built-in packages
 
 # Third-party packages
-from flask import Flask
+from flask import jsonify, Flask
 
 # Local packages
 
@@ -16,5 +16,9 @@ def create_app() -> Flask:
     register_cors(app)
     register_api(app)
     register_db(app)
+
+    @app.route("/health")
+    def _():
+        return jsonify("healthy")
 
     return app
