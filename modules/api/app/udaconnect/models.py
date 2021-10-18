@@ -13,7 +13,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Person(db.Model):
-    __tablename__ = "person"
+    __tablename__ = "persons"
 
     id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=False)
@@ -22,7 +22,7 @@ class Person(db.Model):
 
 
 class Location(db.Model):
-    __tablename__ = "location"
+    __tablename__ = "locations"
 
     id = Column(BigInteger, primary_key=True)
     person_id = Column(Integer, ForeignKey(Person.id), nullable=False)
