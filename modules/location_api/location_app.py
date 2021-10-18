@@ -13,6 +13,5 @@ def create_app() -> Server:
     grpc_server = server(ThreadPoolExecutor(max_workers=10))
     register_db()
     register_api(grpc_server)
-    grpc_server.add_insecure_port("[::]:8080")
 
     return grpc_server

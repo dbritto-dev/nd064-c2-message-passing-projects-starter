@@ -27,6 +27,11 @@ from location_dto import (
 )
 from location_service import LocationService
 from location_helpers import from_instance_to_grpc, from_instances_to_grpc
+from health_pb2 import HealthCheckRequest, HealthCheckResponse
+from health_pb2_grpc import (
+    HealthServicer as BaseHealthServicer,
+    add_HealthServicer_to_server,
+)
 
 
 def register_api(grpc_server: Server):
@@ -76,4 +81,9 @@ def register_api(grpc_server: Server):
             locations = from_instances_to_grpc(instances)
             return RetrieveFilteredResponse(locations=locations)
 
+    class HealthServicer(BaseHealthServicer):
+        def Check(self, request: HealthCheckResponse, context: ServicerContext):
+            return HealthCheckResponse(status=HealthCheckResponse.SERVING)
+
     add_LocationServiceServicer_to_server(LocationServiceServicer(), grpc_server)
+    add_HealthServicer_to_server(HealthServicer(), grpc_server)
