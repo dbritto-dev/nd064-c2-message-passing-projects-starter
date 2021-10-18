@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Usage: pass in the DB container ID as the argument
 
 # Set database configurations
