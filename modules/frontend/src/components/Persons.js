@@ -4,8 +4,7 @@ import Connection from "./Connection";
 class Persons extends Component {
   constructor(props) {
     super(props);
-    // TODO: endpoint should be abstracted into a config variable
-    this.endpoint_url = "http://localhost:30001/api/persons";
+    this.endpoint_url = process.env.REACT_APP_PERSON_API_URL;
     this.state = {
       persons: [],
       display: null,
@@ -13,7 +12,7 @@ class Persons extends Component {
   }
 
   componentDidMount() {
-    fetch(this.endpoint_url)
+    fetch(new URL(this.endpoint_url).toString())
       .then((response) => response.json())
       .then((data) => this.setState({ persons: data }));
   }
