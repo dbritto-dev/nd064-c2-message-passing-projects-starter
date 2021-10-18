@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+  person_db:
+    image: postgres:alpine
+    ports:
+      - "30052:5432"
+    volumes:
+      # The default postgis script is -> /docker-entrypoint-initdb.d/10_postgis.sh
+      - ./modules/person_api/db/11_init_db.sql:/docker-entrypoint-initdb.d/11_init_db.sql
+      - ./modules/person_api/db/12_populate_db.sql:/docker-entrypoint-initdb.d/12_populate_db.sql
+    environment:
+      POSTGRES_USER: person_api_db_user
+      POSTGRES_PASSWORD: person_api_db_pass
+      POSTGRES_DB: person_api_db
+
+  location_db:
+    image: postgis/postgis:14-3.1-alpine
+    ports:
+      - "30062:5432"
+    volumes:
+      # The default postgis script is -> /docker-entrypoint-initdb.d/10_postgis.sh
+      - ./modules/location_api/db/11_init_db.sql:/docker-entrypoint-initdb.d/11_init_db.sql
+      - ./modules/location_api/db/12_populate_db.sql:/docker-entrypoint-initdb.d/12_populate_db.sql
+    environment:
+      POSTGRES_USER: location_api_db_user
+      POSTGRES_PASSWORD: location_api_db_pass
+      POSTGRES_DB: location_api_db
+
+  person_server:
+    build:
+      context: ${PWD}/modules/person_api
+      dockerfile: ${PWD}/modules/person_api/Dockerfile
+    ports:
+      - "30050:30050"
+    environment:
+      DB_USERNAME: person_api_db_user
+      DB_PASSWORD: person_api_db_pass
+      DB_NAME: person_api_db
+      DB_HOST: person_db
+    depends_on:
+      - person_db
+      
+  location_server:
+    build:
+      context: ${PWD}/modules/location_api
+      dockerfile: ${PWD}/modules/location_api/Dockerfile
+    ports:
+      - "30060:30060"
+    environment:
+      DB_USERNAME: location_api_db_user
+      DB_PASSWORD: location_api_db_pass
+      DB_NAME: location_api_db
+      DB_HOST: location_db
+    depends_on:
+      - location_db
+
+  connection_server:
+    build:
+      context: ${PWD}/modules/connection_api
+      dockerfile: ${PWD}/modules/connection_api/Dockerfile
+    ports:
+      - "30070:30070"
+    environment:
+      PERSON_API_ENDPOINT: http://person_server:30050
+      LOCATION_API_ENDPOINT: location_server:30060
+    depends_on:
+      - person_server
+      - location_server
