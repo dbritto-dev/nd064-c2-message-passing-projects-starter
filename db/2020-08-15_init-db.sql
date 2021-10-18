@@ -1,4 +1,4 @@
-CREATE TABLE person (
+CREATE TABLE persons (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR NOT NULL,
     last_name VARCHAR NOT NULL,
@@ -6,12 +6,12 @@ CREATE TABLE person (
 );
 
 
-CREATE TABLE location (
+CREATE TABLE locations (
     id SERIAL PRIMARY KEY,
     person_id INT NOT NULL,
     coordinate GEOMETRY NOT NULL,
     creation_time TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (person_id) REFERENCES person(id)
 );
-CREATE INDEX coordinate_idx ON location (coordinate);
-CREATE INDEX creation_time_idx ON location (creation_time);
+CREATE INDEX coordinate_idx ON locations (coordinate);
+CREATE INDEX creation_time_idx ON locations (creation_time);
