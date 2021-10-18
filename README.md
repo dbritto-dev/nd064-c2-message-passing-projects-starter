@@ -93,8 +93,11 @@ Once the project is up and running, you should be able to see 3 deployments and 
 
 
 These pages should also load on your web browser:
-* `http://localhost:30001/` - OpenAPI Documentation
-* `http://localhost:30001/api/` - Base path for API
+* `http://localhost:30001/` - OpenAPI Documentation for Person API
+* `http://localhost:30001/persons/` - Person API
+* `localhost:30002` - Location API
+* `http://localhost:30003/` - OpenAPI Documentation for Connection API
+* `http://localhost:30003/connections/` - Connection API
 * `http://localhost:30000/` - Frontend ReactJS Application
 
 #### Deployment Note
@@ -112,9 +115,6 @@ As a reminder, each module should have:
 3. `requirements.txt` for `pip` packages
 4. `__init__.py`
 
-### Docker Images
-`udaconnect-app` and `udaconnect-api` use docker images from `isjustintime/udaconnect-app` and `isjustintime/udaconnect-api`. To make changes to the application, build your own Docker image and push it to your own DockerHub repository. Replace the existing container registry path with your own.
-
 ## Configs and Secrets
 In `deployment/db-secret.yaml`, the secret variable is `d293aW1zb3NlY3VyZQ==`. The value is simply encoded and not encrypted -- this is ***not*** secure! Anyone can decode it to see what it is.
 ```bash
@@ -125,6 +125,9 @@ echo "d293aW1zb3NlY3VyZQ==" | base64 -d
 echo "hotdogsfordinner" | base64
 ```
 This is okay for development against an exclusively local environment and we want to keep the setup simple so that you can focus on the project tasks. However, in practice we should not commit our code with secret values into our repository. A CI/CD pipeline can help prevent that.
+
+In `deployment/micro-configmap.yaml` we can find the env variables use by Connection API
+to consume/interact with the other services: Location API and Person API.
 
 ## PostgreSQL Database
 The database uses a plug-in named PostGIS that supports geographic queries. It introduces `GEOMETRY` types and functions that we leverage to calculate distance between `ST_POINT`'s which represent latitude and longitude.
