@@ -5,7 +5,8 @@ micro-services are:
 
 - Person API: created to interact with the data related to the persons
 - Location API: created to interact with the data related to the locations internally
-- Connection API: created to interact with the date related to the connections between persons and locations
+- Connection API: created to interact with the date related to the connections between persons and 
+locations
 
 Person API: this API use REST because needs to be consumed by a web app and the 
 web doesn't support HTTP2 yet.
@@ -13,5 +14,12 @@ web doesn't support HTTP2 yet.
 Location API: this API use gRPC because doesn't needs to be consumed by a web app
 so we can use the advantage of a gRPC Service.
 
-Connection API: this API use REST the same reason as Person API but consume Person API and Location API
-to obtain the necessary data to return the connections of a given person in a given time frame.
+Connection API: this API use REST the same reason as Person API but consume Person API and Location
+API to obtain the necessary data to return the connections of a given person in a given time frame.
+
+# Justification
+
+The current solution splits the service into three micro-services Person API, Location API and 
+Connection  API since we have a high volume of location data we use gRPC on Location API to take the 
+advantage of gRPC and HTTP2. The Connection API consumes the other APIs in order to construct the
+data to return the connections.
