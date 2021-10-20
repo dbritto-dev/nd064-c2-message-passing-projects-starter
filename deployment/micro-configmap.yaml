@@ -3,5 +3,6 @@ kind: ConfigMap
 data:
   PERSON_API_ENDPOINT: http://127.0.0.1:30050
   LOCATION_API_ENDPOINT: 127.0.0.1:30060
+  KAFKA_SERVER: broker-server:29092
 metadata:
   name: micro-env
