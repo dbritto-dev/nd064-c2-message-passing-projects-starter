@@ -10,11 +10,8 @@ spec:
       port: 2181
       nodePort: 31001
     - name: "broker-server-port"
-      port: 9092
+      port: 29092
       nodePort: 31002
-    - name: "broker-ui-server-port"
-      port: 9000
-      nodePort: 31003
     - name: "person-api-port"
       port: 30050
       nodePort: 30001
@@ -54,7 +51,7 @@ spec:
                   name: kafka-env
                   key: ZOOKEEPER_CLIENT_PORT
             - name: ZOOKEEPER_TICK_TIME
-              value: 2000
+              value: "2000"
         - image: confluentinc/cp-kafka:6.2.1
           name: broker-server
           env:
@@ -108,14 +105,6 @@ spec:
                 configMapKeyRef:
                   name: kafka-env
                   key: KAFKA_JMX_HOSTNAME
-        - image: consdata/kouncil:latest
-          name: broker-ui-server
-          env:
-            - name: bootstrapServers
-              valueFrom:
-                configMapKeyRef:
-                  name: micro-env
-                  key: KAFKA_SERVER
         - image: minorpatch/udaconnect-person-api
           name: udaconnect-person-api
           imagePullPolicy: Always
@@ -151,7 +140,7 @@ spec:
                   name: micro-env
                   key: KAFKA_SERVER
             - name: KAFKA_TOPIC
-              value: Persons
+              value: "Persons"
           livenessProbe:
             httpGet:
               path: /health
