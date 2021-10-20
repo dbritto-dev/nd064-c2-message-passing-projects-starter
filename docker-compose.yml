@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  person_db:
+  person-db:
     image: postgres:alpine
     ports:
       - "30052:5432"
@@ -14,7 +14,7 @@ services:
       POSTGRES_PASSWORD: person_api_db_pass
       POSTGRES_DB: person_api_db
 
-  location_db:
+  location-db:
     image: postgis/postgis:14-3.1-alpine
     ports:
       - "30062:5432"
@@ -27,6 +27,45 @@ services:
       POSTGRES_PASSWORD: location_api_db_pass
       POSTGRES_DB: location_api_db
 
+  zookeeper-server:
+    image: confluentinc/cp-zookeeper:6.2.1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker-server:
+    image: confluentinc/cp-kafka:6.2.1
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-server:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker-server:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+    depends_on:
+      - zookeeper-server
+
+  broker-ui-server:
+    image: consdata/kouncil:latest
+    restart: always
+    pull_policy: always
+    ports:
+      - "9000:8080"
+    environment:
+      bootstrapServers: broker-server:29092
+    depends_on:
+      - broker-server
+
   person_server:
     build:
       context: ${PWD}/modules/person_api
@@ -37,10 +76,13 @@ services:
       DB_USERNAME: person_api_db_user
       DB_PASSWORD: person_api_db_pass
       DB_NAME: person_api_db
-      DB_HOST: person_db
+      DB_HOST: person-db
+      KAFKA_SERVER: broker-server:29092
+      KAFKA_TOPIC: Persons
     depends_on:
-      - person_db
-      
+      - person-db
+      - broker-server
+
   location_server:
     build:
       context: ${PWD}/modules/location_api
@@ -51,9 +93,9 @@ services:
       DB_USERNAME: location_api_db_user
       DB_PASSWORD: location_api_db_pass
       DB_NAME: location_api_db
-      DB_HOST: location_db
+      DB_HOST: location-db
     depends_on:
-      - location_db
+      - location-db
 
   connection_server:
     build:
