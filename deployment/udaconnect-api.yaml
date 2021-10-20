@@ -6,12 +6,6 @@ metadata:
   name: udaconnect-api
 spec:
   ports:
-    - name: "zookeeper-server-port"
-      port: 2181
-      nodePort: 31001
-    - name: "broker-server-port"
-      port: 29092
-      nodePort: 31002
     - name: "person-api-port"
       port: 30050
       nodePort: 30001
@@ -42,69 +36,6 @@ spec:
         service: udaconnect-api
     spec:
       containers:
-        - image: confluentinc/cp-zookeeper:6.2.1
-          name: zookeeper-server
-          env:
-            - name: ZOOKEEPER_CLIENT_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: ZOOKEEPER_CLIENT_PORT
-            - name: ZOOKEEPER_TICK_TIME
-              value: "2000"
-        - image: confluentinc/cp-kafka:6.2.1
-          name: broker-server
-          env:
-            - name: KAFKA_BROKER_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_BROKER_ID
-            - name: KAFKA_ZOOKEEPER_CONNECT
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_ZOOKEEPER_CONNECT
-            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-            - name: KAFKA_ADVERTISED_LISTENERS
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_ADVERTISED_LISTENERS
-            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
-            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
-            - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
-            - name: KAFKA_JMX_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_JMX_PORT
-            - name: KAFKA_JMX_HOSTNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-env
-                  key: KAFKA_JMX_HOSTNAME
         - image: minorpatch/udaconnect-person-api
           name: udaconnect-person-api
           imagePullPolicy: Always
