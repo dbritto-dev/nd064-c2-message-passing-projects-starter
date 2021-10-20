@@ -8,13 +8,13 @@ spec:
   ports:
     - name: "zookeeper-server-port"
       port: 2181
-      nodePort: 32181
+      nodePort: 31001
     - name: "broker-server-port"
       port: 9092
-      nodePort: 39092
+      nodePort: 31002
     - name: "broker-ui-server-port"
       port: 9000
-      nodePort: 39000
+      nodePort: 31003
     - name: "person-api-port"
       port: 30050
       nodePort: 30001
@@ -74,7 +74,7 @@ spec:
                   name: kafka-env
                   key: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
             - name: KAFKA_ADVERTISED_LISTENERS
-              valueForm:
+              valueFrom:
                 configMapKeyRef:
                   name: kafka-env
                   key: KAFKA_ADVERTISED_LISTENERS
@@ -104,7 +104,7 @@ spec:
                   name: kafka-env
                   key: KAFKA_JMX_PORT
             - name: KAFKA_JMX_HOSTNAME
-              valueForm:
+              valueFrom:
                 configMapKeyRef:
                   name: kafka-env
                   key: KAFKA_JMX_HOSTNAME
