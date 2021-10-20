@@ -2,7 +2,7 @@
 import logging
 
 # Third-party packages
-from flask import request, Flask
+from flask import request, Flask, Response
 from flask_accepts import accepts, responds
 from flask_restx import Api, Resource
 from werkzeug.exceptions import BadRequest, NotFound
@@ -36,11 +36,10 @@ def handle_no_result_exception(error):
 @ns.route("/")
 class PersonsResource(Resource):
     @accepts(schema=PersonSchema, api=api)
-    @responds(schema=PersonSchema, api=api)
     def post(self) -> PersonModel:
         payload: PersonCreateDTO = request.get_json()
-        person = PersonService.create(payload)
-        return person
+        PersonService.create(payload)
+        return Response(status=202)
 
     @responds(schema=PersonSchema(many=True))
     def get(self) -> list[PersonModel]:

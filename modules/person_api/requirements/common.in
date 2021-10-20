@@ -5,4 +5,5 @@ flask_accepts
 flask_sqlalchemy
 marshmallow_sqlalchemy
 python-dotenv
+kafka-python
 psycopg2-binary
