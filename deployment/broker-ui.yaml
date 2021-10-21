@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: broker-ui
+  name: broker-ui
+spec:
+  ports:
+    - name: "broker-ui-server-port"
+      port: 8080
+      nodePort: 30030
+  selector:
+    service: broker-ui
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: broker-ui
+  name: broker-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: broker-ui
+  template:
+    metadata:
+      labels:
+        service: broker-ui
+    spec:
+      containers:
+        - image: consdata/kouncil:latest
+          name: broker-ui-server
+          env:
+            - name: bootstrapServers
+              valueFrom:
+                configMapKeyRef:
+                  name: micro-env
+                  key: KAFKA_SERVER
+      restartPolicy: Always
