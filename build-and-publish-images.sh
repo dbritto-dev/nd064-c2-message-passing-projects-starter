@@ -5,6 +5,7 @@ DOCKER_USER=minorpatch
 docker login
 
 docker build -f ./modules/person_api/Dockerfile ./modules/person_api -t $DOCKER_USER/udaconnect-person-api
+docker build -f ./modules/person_kafka_consumer/Dockerfile ./modules/person_kafka_consumer -t $DOCKER_USER/udaconnect-person-kafka-consumer
 docker build -f ./modules/location_api/Dockerfile ./modules/location_api -t $DOCKER_USER/udaconnect-location-api
 docker build -f ./modules/connection_api/Dockerfile ./modules/connection_api -t $DOCKER_USER/udaconnect-connection-api
 docker build -f ./modules/frontend/Dockerfile \
@@ -14,6 +15,7 @@ docker build -f ./modules/frontend/Dockerfile \
              -t $DOCKER_USER/udaconnect-app
 
 docker push $DOCKER_USER/udaconnect-person-api
+docker push $DOCKER_USER/udaconnect-person-kafka-consumer
 docker push $DOCKER_USER/udaconnect-location-api
 docker push $DOCKER_USER/udaconnect-connection-api
 docker push $DOCKER_USER/udaconnect-app
