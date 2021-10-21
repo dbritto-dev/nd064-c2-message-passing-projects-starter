@@ -1,0 +1,6 @@
+python-dotenv
+werkzeug
+kafka-python
+sqlalchemy
+marshmallow_sqlalchemy
+psycopg2-binary
