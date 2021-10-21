@@ -55,13 +55,13 @@ class ConnectionService:
         )
         coordinates = map(lambda item: item.coordinate, location_api_response.locations)
 
-        # Cache all users in memory for quick lookup}
+        # Cache all users in memory for quick lookup
         person_api_response = get(f"{PERSON_API_ENDPOINT}/persons/")
         person_map: dict[str, dict] = {
             person.get("id"): person for person in person_api_response.json()
         }
 
-        # # Prepare arguments for queries
+        # Prepare arguments for queries
         result: list[typing.Any] = []
 
         for coordinate in coordinates:
